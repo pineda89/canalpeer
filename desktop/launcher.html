@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+@font-face { font-family: Outfit; font-weight: 400; src: url(data:font/ttf;base64,{{.FontRegular}}) format("truetype"); }
+@font-face { font-family: Outfit; font-weight: 600; src: url(data:font/ttf;base64,{{.FontSemiBold}}) format("truetype"); }
+@font-face { font-family: Outfit; font-weight: 700; src: url(data:font/ttf;base64,{{.FontBold}}) format("truetype"); }
+:root {
+  --bg: #0f1115; --panel: #16191f; --line: #2b313a; --text: #e8ebef; --ink: #f3f5f7;
+  --muted: #adb4be; --accent: #5fb8a0; --on-accent: #0b1512; --err: #e5677f;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bg); color: var(--text); font: 16px/1.4 Outfit, system-ui, sans-serif;
+  display: flex; flex-direction: column; align-items: center; padding: 24px;
+  user-select: none; -webkit-user-select: none; cursor: default;
+}
+.grow { flex: 1; }
+.mark { width: 96px; height: 96px; }
+.mark svg { width: 100%; height: 100%; }
+h1 { margin: 0 0 8px; font-size: 34px; font-weight: 400; color: var(--ink); }
+h1 b { font-weight: 700; color: var(--accent); }
+.tag { color: var(--muted); font-size: 15px; margin-bottom: 40px; }
+form { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 12px; }
+input {
+  font: inherit; color: var(--text); background: var(--panel); min-height: 48px; padding: 0 14px;
+  border: 1px solid var(--line); border-radius: 8px; outline: none; user-select: text; -webkit-user-select: text;
+}
+input::placeholder { color: var(--muted); }
+input:focus { border-color: var(--accent); }
+input.bad { border-color: var(--err); }
+.error { color: var(--err); font-size: 13px; display: none; }
+.error.shown { display: block; }
+button {
+  font: inherit; font-weight: 600; color: var(--on-accent); background: var(--accent);
+  min-height: 48px; border: 0; border-radius: 8px; cursor: pointer;
+}
+button:active { opacity: 0.8; }
+.banner {
+  width: 100%; max-width: 420px; padding: 12px; text-align: center; font-size: 15px;
+  border: 1px solid var(--accent); border-radius: 8px;
+}
+.banner a { color: var(--accent); font-weight: 600; cursor: pointer; margin-left: 6px; }
+.notes { margin: 8px 0 0; padding-left: 18px; text-align: left; color: var(--muted); font-size: 14px; }
+.notes li { margin-top: 4px; }
+.recent { width: 100%; max-width: 420px; margin-top: 24px; }
+.recent h2 { margin: 0 0 6px; font-size: 13px; font-weight: 400; color: var(--muted); }
+.row { display: flex; gap: 6px; margin-top: 6px; }
+.row .play {
+  flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; padding: 8px 14px; min-height: 48px;
+  background: var(--panel); color: var(--text); font-weight: 400; text-align: left; border: 2px solid transparent;
+}
+.row .play:focus-visible { border-color: var(--accent); outline: none; }
+.row .names { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.row .name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row .id { font: 12px ui-monospace, Menlo, Consolas, monospace; color: var(--muted); cursor: copy; align-self: flex-start; }
+.row .id:hover { color: var(--accent); }
+.row .ago { color: var(--muted); font-size: 13px; white-space: nowrap; }
+.row .x { width: 48px; background: none; color: var(--muted); font-weight: 400; border: 2px solid transparent; }
+.row .x:hover, .row .x:focus-visible { color: var(--text); border-color: var(--accent); outline: none; }
+footer { color: var(--muted); font-size: 13px; display: flex; gap: 12px; }
+footer a { color: var(--muted); cursor: pointer; text-decoration: underline; }
+.gear {
+  position: fixed; top: 12px; right: 12px; width: 44px; min-height: 44px; font-size: 22px; font-weight: 400;
+  background: none; color: var(--muted); border: 2px solid transparent; z-index: 2; /* above the open panel */
+}
+.gear:hover, .gear:focus-visible { color: var(--text); border-color: var(--accent); outline: none; }
+.settings {
+  position: fixed; top: 0; right: 0; bottom: 0; width: 48%; padding: 24px 16px; display: none;
+  background: var(--panel); border-left: 1px solid var(--line); flex-direction: column; gap: 10px; z-index: 1;
+}
+.settings.open { display: flex; }
+.settings h2 { margin: 0 0 8px; font-size: 20px; font-weight: 600; color: var(--ink); display: flex; align-items: center; }
+.settings .close {
+  margin-left: auto; width: 40px; min-height: 40px; font-size: 18px; font-weight: 400;
+  background: none; color: var(--muted); border: 2px solid transparent;
+}
+.settings .close:hover, .settings .close:focus-visible { color: var(--text); border-color: var(--accent); outline: none; }
+.settings h3 { margin: 0; font-size: 15px; font-weight: 600; }
+.settings .opts { display: flex; flex-wrap: wrap; gap: 6px; }
+.settings .opt {
+  flex: 1; min-height: 40px; padding: 0 8px; font-size: 14px; font-weight: 400;
+  background: var(--bg); color: var(--text); border: 2px solid var(--line);
+}
+.settings .opt.on { color: var(--accent); border-color: var(--accent); font-weight: 600; }
+.settings .opt:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.settings .help, .settings .inuse { color: var(--muted); font-size: 13px; }
+.settings .inuse { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="grow"></div>
+<div class="mark">{{.Mark}}</div>
+<h1>canal<b>peer</b></h1>
+<div class="tag">P2P video player</div>
+<form id="f">
+  <input id="link" autofocus spellcheck="false" autocomplete="off" placeholder="Content ID or acestream:// link">
+  <div id="error" class="error">That is not a content ID or acestream:// link.</div>
+  <button type="submit">Watch</button>
+</form>
+{{if .Recent}}<section class="recent" id="recent">
+  <h2>Recent</h2>
+  {{range .Recent}}<div class="row" data-id="{{.ID}}">
+    <button class="play" type="button" title="Watch"><span class="names"><span class="name">{{.Name}}</span><span class="id" title="Copy the acestream:// link">{{.Short}}</span></span><span class="ago">{{.Ago}}</span></button>
+    <button class="x" type="button" title="Remove" aria-label="Remove">✕</button>
+  </div>{{end}}
+</section>{{end}}
+<div class="grow"></div>
+{{if .Banner}}<div class="banner">{{.Banner}}{{if eq .BannerAction "download"}}<a onclick="cpDownload()">Download</a>{{end}}
+{{if .Notes}}<ul class="notes">{{range .Notes}}<li>{{.}}</li>{{end}}</ul>{{end}}</div>
+<div class="grow"></div>{{end}}
+<footer><span>Version {{.Version}}</span><a onclick="cpLicenses()">Licenses</a></footer>
+<button class="gear" id="gear" type="button" title="Settings" aria-label="Settings" aria-controls="settings">⚙</button>
+<aside class="settings" id="settings" aria-label="Settings">
+  <h2>Settings<button class="close" id="settingsclose" type="button" title="Close" aria-label="Close">✕</button></h2>
+  <h3>VPN (WARP)</h3>
+  <div class="opts" role="group" aria-label="VPN (WARP)">
+    <button type="button" class="opt{{if eq .Vpn "auto"}} on{{end}}" data-mode="auto" data-help="Direct; through WARP if nothing connects.">Automatic</button>
+    <button type="button" class="opt{{if eq .Vpn "on"}} on{{end}}" data-mode="on" data-help="All the app goes through WARP.">On</button>
+    <button type="button" class="opt{{if eq .Vpn "off"}} on{{end}}" data-mode="off" data-help="Never through WARP.">Off</button>
+  </div>
+  <div class="help" id="vpnhelp"></div>
+  {{if .VpnInUse}}<div class="inuse" id="inuse">In use now: through WARP</div>{{end}}
+</aside>
+<script>
+const field = document.getElementById("link"), error = document.getElementById("error");
+document.getElementById("f").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const msg = await cpWatch(field.value);
+  field.classList.toggle("bad", !!msg);
+  error.classList.toggle("shown", !!msg);
+  if (msg) error.textContent = msg;
+});
+field.addEventListener("input", () => { field.classList.remove("bad"); error.classList.remove("shown"); });
+// Recent: a row plays its channel (an id is a valid link), its id copies the
+// whole link, its ✕ forgets it. Ids reach the script through data-id only.
+document.querySelectorAll("#recent .row").forEach(row => {
+  const id = row.dataset.id, idEl = row.querySelector(".id");
+  row.querySelector(".play").addEventListener("click", e => {
+    if (e.target === idEl) return;
+    cpWatch(id);
+  });
+  idEl.addEventListener("click", () => {
+    copyText("acestream://" + id);
+    const was = idEl.textContent;
+    idEl.textContent = "Link copied";
+    setTimeout(() => { idEl.textContent = was; }, 1500);
+  });
+  row.querySelector(".x").addEventListener("click", () => {
+    cpForget(id);
+    const list = row.parentElement;
+    row.remove();
+    if (!list.querySelector(".row")) list.remove();
+  });
+});
+// Settings: the ⚙ opens a side panel; arrows move between its options, Enter
+// or a click chooses one (applied at once), Esc closes it.
+const gear = document.getElementById("gear"), panel = document.getElementById("settings");
+const opts = [...panel.querySelectorAll(".opt")], help = document.getElementById("vpnhelp");
+const chosen = () => panel.querySelector(".opt.on") || opts[0];
+help.textContent = chosen().dataset.help;
+function showPanel(open) {
+  panel.classList.toggle("open", open);
+  gear.setAttribute("aria-expanded", open);
+  (open ? chosen() : gear).focus();
+}
+gear.addEventListener("click", () => showPanel(!panel.classList.contains("open")));
+document.getElementById("settingsclose").addEventListener("click", () => showPanel(false));
+// A click anywhere outside the panel (the ⚙ toggles by itself) closes it.
+document.addEventListener("click", e => {
+  if (panel.classList.contains("open") && !panel.contains(e.target) && !gear.contains(e.target)) showPanel(false);
+});
+opts.forEach(b => b.addEventListener("click", () => {
+  if (b.classList.contains("on")) return; // unchanged: nothing to apply
+  opts.forEach(o => o.classList.toggle("on", o === b));
+  help.textContent = b.dataset.help;
+  document.getElementById("inuse")?.remove(); // a snapshot of the old mode
+  cpSetVpn(b.dataset.mode);
+}));
+document.addEventListener("keydown", e => {
+  if (!panel.classList.contains("open")) return;
+  if (e.key === "Escape") { e.preventDefault(); showPanel(false); return; }
+  const i = opts.indexOf(document.activeElement), d = {ArrowLeft: -1, ArrowUp: -1, ArrowRight: 1, ArrowDown: 1}[e.key];
+  if (i >= 0 && d) { e.preventDefault(); opts[Math.max(0, Math.min(opts.length - 1, i + d))].focus(); }
+});
+function copyText(text) {
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand("copy");
+  ta.remove();
+}
+</script>
+</body>
+</html>

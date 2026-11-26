@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A soft dark disc behind each control: readable on any frame without dimming the
+     picture. On a TV remote the focused one turns accent, so the viewer sees where they are. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape android:shape="oval">
+            <solid android:color="@color/accent" />
+            <stroke android:width="3dp" android:color="@color/ink" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#660f1115" />
+        </shape>
+    </item>
+</selector>

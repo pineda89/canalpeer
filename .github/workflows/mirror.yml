@@ -1,0 +1,53 @@
+# Publishes the site's channel archive on the `mirror` branch every hour, for
+# the apps to fall back on when canalpeer.com cannot be reached.
+name: mirror
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency: mirror
+
+jobs:
+  mirror:
+    # Nothing can read a private repo's branch.
+    if: ${{ !github.event.repository.private }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: core/go.mod
+          cache-dependency-path: core/go.sum
+      - name: Fetch the channel archive
+        run: |
+          set -euo pipefail
+          curl -fsS --retry 3 --max-time 60 -H 'Accept-Encoding: gzip' -D headers -o descriptors.json.gz \
+            https://canalpeer.com/api/descriptors
+          grep -qi '^content-encoding: gzip' headers
+          new=$(gzip -dc descriptors.json.gz | jq '[.items[].seq] | max // 0')
+          old=$(curl -fsS "https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/mirror/seq.txt" || echo 0)
+          echo "site=$new mirror=$old"
+          # Never roll the mirror back, and skip a push when nothing changed.
+          if [ "$new" -gt "$old" ]; then echo "publish=1" >> "$GITHUB_ENV"; fi
+      - name: Publish as a single commit
+        if: env.publish == '1'
+        env:
+          # mirrorKey in core/mobile/resolve.go, which says why it is no secret;
+          # a test there keeps the two the same.
+          MIRROR_KEY: 36955e9a54acb12ea0cffc4ee62b7ea4faab580afd226e0c5d9032ed0f4d6246
+        run: |
+          set -euo pipefail
+          mkdir out
+          (cd core && go run ./cmd/seal) < descriptors.json.gz > out/data.bin
+          gzip -dc descriptors.json.gz | jq '[.items[].seq] | max // 0' > out/seq.txt
+          cd out
+          git init -q -b mirror
+          git add data.bin seq.txt
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -q -m "Data"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${GITHUB_REPOSITORY}.git" mirror

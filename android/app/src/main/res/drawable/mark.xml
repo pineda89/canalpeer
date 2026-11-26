@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- brand/mark.svg: a play button made of three connected peers. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp" android:height="96dp" android:viewportWidth="100" android:viewportHeight="100">
+    <path android:pathData="M30,22 L30,78 L80,50 Z" android:fillColor="#335fb8a0"
+        android:strokeColor="#5fb8a0" android:strokeWidth="5" android:strokeLineJoin="round" />
+    <path android:pathData="M21,22 a9,9 0 1,0 18,0 a9,9 0 1,0 -18,0" android:fillColor="#f3f5f7" />
+    <path android:pathData="M21,78 a9,9 0 1,0 18,0 a9,9 0 1,0 -18,0" android:fillColor="#f3f5f7" />
+    <path android:pathData="M71,50 a9,9 0 1,0 18,0 a9,9 0 1,0 -18,0" android:fillColor="#f3f5f7" />
+</vector>

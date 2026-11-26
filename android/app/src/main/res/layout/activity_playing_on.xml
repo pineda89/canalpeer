@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The channel went to a TV: which one, and Stop. Back leaves it playing there. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <ImageView
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_cast" />
+
+    <TextView
+        android:id="@+id/playing_on"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/outfit"
+        android:gravity="center"
+        android:textColor="@color/ink"
+        android:textSize="22sp" />
+
+    <!-- A failed Stop, in words. -->
+    <TextView
+        android:id="@+id/playing_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/outfit"
+        android:gravity="center"
+        android:textColor="@color/err"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/playing_stop"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/button_accent"
+        android:fontFamily="@font/outfit"
+        android:minHeight="48dp"
+        android:stateListAnimator="@null"
+        android:text="@string/send_stop"
+        android:textAllCaps="false"
+        android:textColor="@color/on_accent"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+</LinearLayout>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="CanalPeer">
+  <!-- A play button made of three connected peers. For dark grounds. -->
+  <path d="M30 22 L30 78 L80 50 Z" fill="#5fb8a0" fill-opacity="0.2" stroke="#5fb8a0" stroke-width="5" stroke-linejoin="round"/>
+  <circle cx="30" cy="22" r="9" fill="#f3f5f7"/>
+  <circle cx="30" cy="78" r="9" fill="#f3f5f7"/>
+  <circle cx="80" cy="50" r="9" fill="#f3f5f7"/>
+</svg>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The launcher, as the iPhone's HomeView: mark, wordmark, field, Watch, update banner,
+     version, and the settings button top right.
+     Scrolls, so a phone in landscape with the keyboard up still reaches Watch. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/mark" />
+
+            <TextView
+                android:id="@+id/wordmark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:contentDescription="CanalPeer"
+                android:fontFamily="@font/outfit"
+                android:textColor="@color/ink"
+                android:textSize="34sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="40dp"
+                android:fontFamily="@font/outfit"
+                android:text="@string/tagline"
+                android:textColor="@color/muted"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:id="@+id/form"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Paste: a TV remote has no way to paste into the field. -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/input"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/field_bg"
+                        android:fontFamily="@font/outfit"
+                        android:hint="@string/input_hint"
+                        android:imeOptions="actionGo"
+                        android:importantForAutofill="no"
+                        android:inputType="textNoSuggestions|textUri"
+                        android:minHeight="48dp"
+                        android:nextFocusDown="@+id/watch"
+                        android:nextFocusRight="@+id/paste"
+                        android:nextFocusUp="@+id/settings_button"
+                        android:paddingHorizontal="14dp"
+                        android:singleLine="true"
+                        android:textColor="@color/text"
+                        android:textColorHint="@color/muted"
+                        android:textCursorDrawable="@null"
+                        android:textSize="16sp" />
+
+                    <Button
+                        android:id="@+id/paste"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/banner_bg"
+                        android:fontFamily="@font/outfit"
+                        android:minHeight="48dp"
+                        android:nextFocusDown="@+id/watch"
+                        android:nextFocusRight="@+id/settings_button"
+                        android:nextFocusUp="@+id/settings_button"
+                        android:paddingHorizontal="14dp"
+                        android:stateListAnimator="@null"
+                        android:text="@string/paste"
+                        android:textAllCaps="false"
+                        android:textColor="@color/accent"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/outfit"
+                    android:text="@string/err_bad_input"
+                    android:textColor="@color/err"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/watch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/button_accent"
+                    android:fontFamily="@font/outfit"
+                    android:minHeight="48dp"
+                    android:stateListAnimator="@null"
+                    android:text="@string/watch"
+                    android:textAllCaps="false"
+                    android:textColor="@color/on_accent"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <!-- The channels this device played: gone while there are none. -->
+                <TextView
+                    android:id="@+id/recent_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="2dp"
+                    android:fontFamily="@font/outfit"
+                    android:text="@string/recent"
+                    android:textColor="@color/muted"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/recent_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/banner_bg"
+                android:focusable="true"
+                android:fontFamily="@font/outfit"
+                android:gravity="center"
+                android:padding="12dp"
+                android:textColor="@color/text"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/outfit"
+                android:textColor="@color/muted"
+                android:textSize="13sp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Opens the settings panel; Up from the field reaches it on a remote. After the
+         form in the tree, so the first focus still goes to the field. -->
+    <ImageButton
+        android:id="@+id/settings_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="24dp"
+        android:background="@drawable/banner_bg"
+        android:contentDescription="@string/settings"
+        android:nextFocusDown="@+id/input"
+        android:padding="12dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_settings" />
+</FrameLayout>

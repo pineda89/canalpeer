@@ -1,0 +1,54 @@
+# XcodeGen spec: `make ios-project` generates CanalPeer.xcodeproj (not in git).
+name: CanalPeer
+options:
+  bundleIdPrefix: com.canalpeer
+  deploymentTarget:
+    iOS: "16.0"
+settings:
+  base:
+    MARKETING_VERSION: ${CANALPEER_VERSION}
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1,2"
+    # No team in git: it identifies the owner. The Makefile passes it for
+    # device builds; published .ipa files are unsigned (SideStore signs them).
+    CODE_SIGN_STYLE: Automatic
+targets:
+  CanalPeer:
+    type: application
+    platform: iOS
+    sources: [CanalPeer]
+    dependencies:
+      - framework: Frameworks/Mobile.xcframework
+        embed: false
+      - framework: Vendor/MobileVLCKit.xcframework
+        embed: true
+      - sdk: libc++.tbd
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.canalpeer.app
+        ENABLE_BITCODE: NO
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        # Keeps the builder's paths out of the binary.
+        DEBUG_INFORMATION_FORMAT: dwarf
+    info:
+      path: CanalPeer/Info.plist
+      properties:
+        CFBundleDisplayName: CanalPeer
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+        UIUserInterfaceStyle: Dark
+        UIAppFonts: [Outfit-Regular.ttf, Outfit-SemiBold.ttf, Outfit-Bold.ttf]
+        UIApplicationSupportsIndirectInputEvents: true
+        UISupportedInterfaceOrientations:
+          [UIInterfaceOrientationPortrait, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+        # iPad multitasking needs all four.
+        UISupportedInterfaceOrientations~ipad:
+          [UIInterfaceOrientationPortrait, UIInterfaceOrientationPortraitUpsideDown, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+        CFBundleURLTypes:
+          - CFBundleURLName: com.canalpeer.app.acestream
+            CFBundleURLSchemes: [acestream]

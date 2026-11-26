@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The site's palette (canalpeer-web/docs/brand.md), as in the iPhone app. -->
+<resources>
+    <color name="bg">#0f1115</color>
+    <color name="panel">#16191f</color>
+    <color name="line">#2b313a</color>
+    <color name="text">#e8ebef</color>
+    <color name="ink">#f3f5f7</color>
+    <color name="muted">#adb4be</color>
+    <color name="accent">#5fb8a0</color>
+    <color name="on_accent">#0b1512</color>
+    <color name="err">#e5677f</color>
+</resources>

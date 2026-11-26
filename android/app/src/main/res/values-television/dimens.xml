@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Read from across the room. -->
+<resources>
+    <dimen name="status_text">28sp</dimen>
+    <dimen name="info_text">20sp</dimen>
+</resources>

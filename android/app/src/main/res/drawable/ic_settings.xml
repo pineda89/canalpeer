@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A sliders glyph for the settings button. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="#f3f5f7" android:pathData="M3,6 H11 V4 H13 V8 H11 V6 H3 Z M15,6 H21 V8 H15 Z M3,11 H5 V9 H7 V13 H5 V11 H3 Z M9,11 H21 V13 H9 Z M3,18 H13 V16 H15 V20 H13 V18 H3 Z M17,18 H21 V20 H17 Z" />
+</vector>

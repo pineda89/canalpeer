@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Controls over the video, as the iPhone player's. Touch on phones; on a TV the
+     remote's OK opens them and the arrows move between them (focus follows layout). -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/controls"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone">
+
+    <LinearLayout
+        android:id="@+id/centre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/back5"
+            android:nextFocusDown="@id/volumeButton"
+            style="@style/ControlText"
+            android:contentDescription="@string/back5"
+            android:focusable="true"
+            android:text="−5" />
+
+        <ImageButton
+            android:id="@+id/playPause"
+            android:nextFocusDown="@id/volumeButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginHorizontal="40dp"
+            android:background="@drawable/control_bg"
+            android:contentDescription="@string/pause"
+            android:padding="18dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_pause" />
+
+        <TextView
+            android:id="@+id/forward5"
+            android:nextFocusDown="@id/volumeButton"
+            style="@style/ControlText"
+            android:contentDescription="@string/forward5"
+            android:focusable="true"
+            android:text="+5" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/stop"
+        style="@style/ControlIcon"
+        android:layout_gravity="top|start"
+        android:contentDescription="@string/stop"
+        android:src="@drawable/ic_back" />
+
+    <!-- Phones only: they send the channel to a TV, TVs receive. Beside Stop: the
+         right row already fills a narrow phone in portrait. -->
+    <ImageButton
+        android:id="@+id/sendButton"
+        style="@style/ControlIconTop"
+        android:layout_gravity="top|start"
+        android:layout_marginStart="76dp"
+        android:contentDescription="@string/send_to_tv"
+        android:src="@drawable/ic_cast"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal">
+
+        <!-- Phones only: a TV has no other app to watch beside it. -->
+        <ImageButton
+            android:id="@+id/pipButton"
+            style="@style/ControlIconTop"
+            android:contentDescription="@string/pip"
+            android:src="@drawable/ic_pip"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/audioButton"
+            style="@style/ControlIconTop"
+            android:contentDescription="@string/audio_track"
+            android:src="@drawable/ic_audio"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/settingsButton"
+            style="@style/ControlIconTop"
+            android:contentDescription="@string/settings"
+            android:src="@drawable/ic_settings" />
+
+        <ImageButton
+            android:id="@+id/infoButton"
+            style="@style/ControlIconTop"
+            android:contentDescription="@string/info_button"
+            android:src="@drawable/ic_info" />
+
+        <ImageButton
+            android:id="@+id/fullscreen"
+            style="@style/ControlIconTop"
+            android:contentDescription="@string/fullscreen"
+            android:src="@drawable/ic_fullscreen" />
+    </LinearLayout>
+
+    <!-- Bottom left, where a phone in portrait still has room for it; a
+         movie's bar goes under it. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+
+        <!-- The device's media volume, the same the side buttons move. On a TV the
+             arrows reach it; left and right move the bar, so they cannot leave it
+             for the mute button: down from the centre lands on that button. -->
+        <LinearLayout
+            android:id="@+id/volumeRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/volumeButton"
+                style="@style/ControlIcon"
+                android:contentDescription="@string/mute"
+                android:src="@drawable/ic_volume" />
+
+            <SeekBar
+                android:id="@+id/volumeBar"
+                android:layout_width="160dp"
+                android:layout_height="40dp"
+                android:background="@drawable/bar_focus"
+                android:contentDescription="@string/volume"
+                android:focusable="true"
+                android:progressBackgroundTint="@color/ink"
+                android:progressTint="@color/accent"
+                android:thumbTint="@color/ink" />
+        </LinearLayout>
+
+        <!-- Movies only: live streams have no length to show. -->
+        <LinearLayout
+            android:id="@+id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/position"
+                style="@style/ControlTime" />
+
+            <androidx.media3.ui.DefaultTimeBar
+                android:id="@+id/timeBar"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="12dp"
+                app:buffered_color="#66f3f5f7"
+                app:played_color="@color/accent"
+                app:scrubber_color="@color/ink"
+                app:unplayed_color="#33f3f5f7" />
+
+            <TextView
+                android:id="@+id/duration"
+                style="@style/ControlTime" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
